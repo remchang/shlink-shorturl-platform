@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>短网址管理台 · 实验03</title>
+  <link rel="stylesheet" href="/static/zhuti.css">
+</head>
+<body>
+
+<header class="dingbu">
+  <div class="biaoti">
+    <span class="yuandian"></span>
+    <h1>短网址管理台</h1>
+    <span class="fu">Shlink 5.1.6 + PostgreSQL 16 + 自建 Web</span>
+  </div>
+  <div class="jiankang">
+    <span class="deng" id="deng-web">Web</span>
+    <span class="deng" id="deng-shlink">Shlink</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ 创建区 ============ -->
+  <section class="kapian">
+    <h2>① 生成短链</h2>
+    <form id="chuangjian-biaodan" autocomplete="off">
+      <div class="hang">
+        <label class="kuan">长网址</label>
+        <input type="text" id="chang-url" placeholder="http://localhost:9001/demo.html">
+        <span class="tishi" id="tishi-chang-url">只允许白名单内的 http/https 地址</span>
+      </div>
+
+      <div class="hang-er">
+        <div class="hang">
+          <label class="kuan">自定义短码</label>
+          <input type="text" id="zidingyi-duanma" placeholder="留空自动生成">
+          <span class="tishi">3~32 位，字母数字 - _</span>
+        </div>
+        <div class="hang">
+          <label class="kuan">有效期（天）</label>
+          <input type="number" id="youxiaoqi" placeholder="0 = 永久" min="0" max="365">
+          <span class="tishi">最多 365 天</span>
+        </div>
+      </div>
+
+      <div class="anniu-hang">
+        <button type="submit" id="anniu-chuangjian">生成短链</button>
+        <span class="shengyu" id="shengyu-cishu"></span>
+      </div>
+    </form>
+
+    <div class="jieguo" id="jieguo-qu" hidden>
+      <div class="jieguo-hang">
+        <span class="biaoqian-lv">短链</span>
+        <a id="jieguo-duan-url" href="#" target="_blank" rel="noopener"></a>
+        <button class="xiao" data-fuzhi="jieguo-duan-url">复制</button>
+        <img id="jieguo-erweima" alt="二维码" hidden>
+      </div>
+      <div class="jieguo-hang">
+        <span class="biaoqian-hui">指向</span>
+        <span id="jieguo-chang-url" class="danhang"></span>
+      </div>
+    </div>
+
+    <div class="cuowu" id="cuowu-qu" hidden></div>
+  </section>
+
+  <!-- ============ 汇总 ============ -->
+  <section class="shuzi-qu" id="shuzi-qu">
+    <div class="shuzi"><b id="s-zong">-</b><span>短链总数</span></div>
+    <div class="shuzi"><b id="s-fangwen">-</b><span>累计访问</span></div>
+    <div class="shuzi"><b id="s-youxiao">-</b><span>有效中</span></div>
+    <div class="shuzi"><b id="s-guoqi">-</b><span>已过期</span></div>
+    <div class="shuzi"><b id="s-pingjun">-</b><span>平均访问</span></div>
+  </section>
+
+  <!-- ============ 列表 ============ -->
+  <section class="kapian">
+    <div class="liebiao-tou">
+      <h2>② 短链列表</h2>
+      <div>
+        <input type="search" id="sousuo" placeholder="搜短码或网址">
+        <button class="xiao" id="anniu-shuaxin">刷新</button>
+      </div>
+    </div>
+
+    <table class="liebiao">
+      <thead>
+        <tr>
+          <th style="width:110px">短码</th>
+          <th>原网址</th>
+          <th style="width:80px">访问</th>
+          <th style="width:150px">创建时间</th>
+          <th style="width:130px">到期</th>
+          <th style="width:190px">操作</th>
+        </tr>
+      </thead>
+      <tbody id="liebiao-ti">
+        <tr><td colspan="6" class="kong">加载中…</td></tr>
+      </tbody>
+    </table>
+
+    <div class="fanye">
+      <button class="xiao" id="shang-ye">上一页</button>
+      <span id="ye-ma">1 / 1</span>
+      <button class="xiao" id="xia-ye">下一页</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ 统计抽屉 ============ -->
+<div class="zhezhao" id="zhezhao" hidden>
+  <div class="chouti">
+    <div class="chouti-tou">
+      <h3 id="chouti-biaoti">访问统计</h3>
+      <button class="xiao" id="guan-chouti">关闭</button>
+    </div>
+    <div id="chouti-neirong"></div>
+  </div>
+</div>
+
+<div class="tishilan" id="tishilan" hidden></div>
+
+<script src="/static/qianduan.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+/* ============================================================
+   短网址管理台样式
+   单文件手写，不引 UI 框架 —— 实验要求自己实现界面，引框架反而说不清楚。
+   ============================================================ */
+
+:root {
+  --zhu: #4f46e5;
+  --zhu-qian: #6366f1;
+  --lv: #10b981;
+  --hong: #ef4444;
+  --huang: #f59e0b;
+  --wen: #f8fafc;
+  --kapian: #ffffff;
+  --bian: #e2e8f0;
+  --zi: #1e293b;
+  --zi-qian: #64748b;
+  --yuanjiao: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+  background: var(--wen);
+  color: var(--zi);
+  line-height: 1.6;
+  padding-bottom: 60px;
+}
+
+/* ---------- 顶栏 ---------- */
+.dingbu {
+  background: linear-gradient(100deg, #4f46e5, #7c3aed);
+  color: #fff;
+  padding: 18px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 12px rgba(79, 70, 229, .25);
+}
+.biaoti { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.biaoti h1 { font-size: 20px; font-weight: 600; }
+.biaoti .fu { font-size: 13px; opacity: .8; }
+.yuandian {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #a7f3d0; box-shadow: 0 0 10px #a7f3d0;
+}
+.jiankang { display: flex; gap: 10px; }
+.deng {
+  font-size: 12px; padding: 4px 12px; border-radius: 999px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+}
+.deng.hao { background: rgba(16,185,129,.25); border-color: #6ee7b7; }
+.deng.huai { background: rgba(239,68,68,.25); border-color: #fca5a5; }
+
+main { max-width: 1180px; margin: 24px auto; padding: 0 20px; }
+
+/* ---------- 卡片 ---------- */
+.kapian {
+  background: var(--kapian);
+  border: 1px solid var(--bian);
+  border-radius: var(--yuanjiao);
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(15,23,42,.04);
+}
+.kapian h2 {
+  font-size: 15px; font-weight: 600; margin-bottom: 16px;
+  padding-left: 10px; border-left: 3px solid var(--zhu);
+}
+
+/* ---------- 表单 ---------- */
+.hang { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.hang-er { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.kuan { width: 96px; flex: none; font-size: 14px; color: var(--zi-qian); }
+input[type=text], input[type=number], input[type=search] {
+  flex: 1; min-width: 180px;
+  padding: 9px 12px;
+  border: 1px solid var(--bian);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus {
+  outline: none; border-color: var(--zhu-qian);
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+.tishi { font-size: 12px; color: var(--zi-qian); }
+
+.anniu-hang { display: flex; align-items: center; gap: 14px; margin-top: 18px; }
+button {
+  padding: 9px 20px;
+  border: none; border-radius: 8px;
+  background: var(--zhu); color: #fff;
+  font-size: 14px; font-family: inherit;
+  cursor: pointer; transition: background .15s;
+}
+button:hover:not(:disabled) { background: #4338ca; }
+button:disabled { opacity: .55; cursor: not-allowed; }
+button.xiao {
+  padding: 5px 12px; font-size: 12px;
+  background: #eef2ff; color: var(--zhu);
+}
+button.xiao:hover:not(:disabled) { background: #e0e7ff; }
+button.wei { background: #fef2f2; color: var(--hong); }
+button.wei:hover:not(:disabled) { background: #fee2e2; }
+.shengyu { font-size: 12px; color: var(--zi-qian); }
+
+/* ---------- 结果 ---------- */
+.jieguo {
+  margin-top: 18px; padding: 14px 16px;
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px;
+}
+.jieguo-hang { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.jieguo-hang:last-child { margin-bottom: 0; }
+.biaoqian-lv {
+  font-size: 12px; padding: 2px 8px; border-radius: 6px;
+  background: #dcfce7; color: #15803d;
+}
+.biaoqian-hui {
+  font-size: 12px; padding: 2px 8px; border-radius: 6px;
+  background: #f1f5f9; color: var(--zi-qian);
+}
+#jieguo-duan-url { color: var(--zhu); font-weight: 600; text-decoration: none; }
+#jieguo-duan-url:hover { text-decoration: underline; }
+#jieguo-erweima { width: 72px; height: 72px; border: 1px solid var(--bian); border-radius: 6px; }
+.danhang { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 640px; }
+
+.cuowu {
+  margin-top: 16px; padding: 12px 16px;
+  background: #fef2f2; border: 1px solid #fecaca; border-left: 4px solid var(--hong);
+  border-radius: 8px; color: #b91c1c; font-size: 14px;
+}
+
+/* ---------- 汇总数字 ---------- */
+.shuzi-qu {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 14px; margin-bottom: 20px;
+}
+.shuzi {
+  background: var(--kapian); border: 1px solid var(--bian);
+  border-radius: var(--yuanjiao); padding: 16px;
+  text-align: center;
+}
+.shuzi b { display: block; font-size: 24px; color: var(--zhu); font-weight: 700; }
+.shuzi span { font-size: 12px; color: var(--zi-qian); }
+
+/* ---------- 列表 ---------- */
+.liebiao-tou {
+  display: flex; justify-content: space-between;
+  align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.liebiao-tou h2 { margin: 0; }
+.liebiao-tou > div { display: flex; gap: 8px; }
+.liebiao-tou input { min-width: 200px; }
+
+table.liebiao { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.liebiao th {
+  text-align: left; padding: 10px 8px;
+  border-bottom: 2px solid var(--bian);
+  color: var(--zi-qian); font-weight: 600; font-size: 12px;
+}
+table.liebiao td {
+  padding: 10px 8px; border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+table.liebiao tr:hover td { background: #fafbff; }
+.kong { text-align: center; color: var(--zi-qian); padding: 32px 0 !important; }
+.duanma {
+  font-family: Consolas, monospace; font-weight: 600;
+  color: var(--zhu); cursor: pointer;
+}
+.duanma:hover { text-decoration: underline; }
+.lianjie {
+  display: block; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--zi-qian);
+}
+.cishu { font-weight: 700; color: var(--lv); }
+.cishu.ling { color: #cbd5e1; font-weight: 400; }
+.caozuo { display: flex; gap: 6px; }
+.youxiao { color: var(--lv); }
+.guoqi { color: var(--hong); }
+.fanye {
+  display: flex; justify-content: center; align-items: center;
+  gap: 14px; margin-top: 16px; font-size: 13px; color: var(--zi-qian);
+}
+
+/* ---------- 抽屉 ---------- */
+.zhezhao {
+  position: fixed; inset: 0; background: rgba(15,23,42,.45);
+  display: flex; justify-content: flex-end; z-index: 50;
+}
+.chouti {
+  width: min(680px, 100%); height: 100%;
+  background: #fff; padding: 22px 26px; overflow-y: auto;
+  box-shadow: -4px 0 24px rgba(15,23,42,.2);
+}
+.chouti-tou {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--bian);
+}
+.chouti-tou h3 { font-size: 16px; }
+.tj-kuai { margin-bottom: 22px; }
+.tj-kuai h4 { font-size: 13px; color: var(--zi-qian); margin-bottom: 10px; }
+.tj-da { font-size: 30px; font-weight: 700; color: var(--zhu); }
+.tj-tiao { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 12px; }
+.tj-tiao .ming { width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tj-tiao .tiao { flex: 1; height: 8px; background: #eef2ff; border-radius: 4px; overflow: hidden; }
+.tj-tiao .tiao > i { display: block; height: 100%; background: var(--zhu-qian); }
+.tj-tiao .shu { width: 40px; text-align: right; color: var(--zi-qian); }
+.tj-tishi {
+  font-size: 12px; color: #92400e; background: #fef3c7;
+  border-radius: 6px; padding: 8px 12px;
+}
+
+/* ---------- 浮层提示 ---------- */
+.tishilan {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+  background: #1e293b; color: #fff; padding: 10px 22px;
+  border-radius: 999px; font-size: 13px; z-index: 99;
+  box-shadow: 0 6px 20px rgba(15,23,42,.3);
+}
+
+@media (max-width: 860px) {
+  .shuzi-qu { grid-template-columns: repeat(2, 1fr); }
+  .hang-er { grid-template-columns: 1fr; }
+  table.liebiao th:nth-child(4), table.liebiao td:nth-child(4) { display: none; }
+}
