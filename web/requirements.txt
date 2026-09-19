@@ -1,0 +1,8 @@
+# Web 管理界面依赖（固定版本，别写 >= 或者最新版）
+Flask==3.0.3
+requests==2.32.3
+qrcode==7.4.2
+pillow==10.4.0
+gunicorn==22.0.0
+# 仅测试用
+pytest==8.3.3
