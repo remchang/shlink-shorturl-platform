@@ -1,0 +1,103 @@
+# ============================================================
+# 实验03 容器化短网址服务系统 —— Compose 编排
+#   三个服务：db(PostgreSQL) -> shlink(短链API) -> web(自己写的管理界面)
+#   启动顺序靠 depends_on + healthcheck，不用 sleep 硬等。
+#   Docker Compose v2 语法，不需要写 version: 字段（写了反而警告）。
+# ============================================================
+
+services:
+  db:
+    image: postgres:${POSTGRES_TAG}
+    container_name: duanlian-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: shlink
+      POSTGRES_USER: shlink
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      # 命名卷：容器删了数据还在，这是本实验持久化的关键
+      - shlink-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shlink -d shlink"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+    networks:
+      - duanlian-net
+
+  shlink:
+    image: shlinkio/shlink:${SHLINK_TAG}
+    container_name: duanlian-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        # 等数据库真的能接受了再启动，避免 Shlink 起一半崩掉不停重启
+        condition: service_healthy
+    environment:
+      DEFAULT_DOMAIN: ${DEFAULT_DOMAIN}
+      IS_HTTPS_ENABLED: ${IS_HTTPS_ENABLED}
+      DB_DRIVER: postgres
+      DB_HOST: db
+      DB_NAME: shlink
+      DB_USER: shlink
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      INITIAL_API_KEY: ${INITIAL_API_KEY}
+      # 关掉自动抓标题：不然 Shlink 会去服务器端抓 localhost 长链，抓不到还报错
+      AUTO_RESOLVE_TITLES: "false"
+      # 跳过 GeoLite 下载，离线环境也能起来（代价是没有 IP 地理定位）
+      SKIP_INITIAL_GEOLITE_DOWNLOAD: "true"
+    ports:
+      # 只绑回环：短链跳转要能对外访问，但管理 API 不要暴露到局域网
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test:
+        - CMD
+        - php
+        - -r
+        - "exit(@file_get_contents('http://127.0.0.1:8080/rest/health')===false?1:0);"
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+    networks:
+      - duanlian-net
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: duanlian-web
+    restart: unless-stopped
+    depends_on:
+      shlink:
+        # 这里也是靠健康状态，不是靠 sleep
+        condition: service_healthy
+    environment:
+      # ★ 关键：容器里访问 Shlink 必须用服务名 shlink，不能用 localhost
+      #   容器里的 localhost 指的是 Web 自己
+      SHLINK_JICHU_URL: http://shlink:8080
+      SHLINK_API_KEY: ${INITIAL_API_KEY}
+      CHANG_URL_BAIMINGDAN: "localhost,127.0.0.1,host.docker.internal,shlink"
+      XIANZHI_CHUANGJIAN_CISHU: ${XIANZHI_CHUANGJIAN_CISHU}
+      XIANZHI_CHUANGJIAN_CHUANGKOU_MIAO: ${XIANZHI_CHUANGJIAN_CHUANGKOU_MIAO}
+      XIANZHI_ZUIDA_YOUXIAOQI_TIAN: ${XIANZHI_ZUIDA_YOUXIAOQI_TIAN}
+      FLASK_ENV: production
+    ports:
+      - "127.0.0.1:${WEB_PORT}:8501"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8501/api/jiankang').status==200 else 1)\""]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - duanlian-net
+
+volumes:
+  shlink-db:
+    name: duanlian-shlink-db
+
+networks:
+  duanlian-net:
+    name: duanlian-net
