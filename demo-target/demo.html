@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>演示用长网址目标页</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      max-width: 720px; margin: 60px auto; padding: 0 24px;
+      color: #1e293b; line-height: 1.8;
+    }
+    h1 { color: #4f46e5; }
+    .ka { background: #f8fafc; border-left: 4px solid #6366f1;
+          padding: 14px 18px; border-radius: 8px; margin: 24px 0; }
+    code { background: #eef2ff; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<h1>你被跳转到了这里</h1>
+
+<p>如果你是从一条短链跳过来的，说明 <strong>短链重定向是通的</strong>，
+而且这次访问已经被 Shlink 记进统计了。</p>
+
+<div class="ka">
+  <p><strong>为什么要有这个页面？</strong></p>
+  <p>实验要求“完全离线可演示”。公网网址会受网络影响，还有被墙/失效的风险；
+  本地起一个静态站点当长 URL，断网也能演示，而且不用给 Shlink 开自动抓标题。</p>
+</div>
+
+<h2>怎么启动这个页面</h2>
+<pre><code>python -m http.server 9001 --bind 127.0.0.1 --directory demo-target</code></pre>
+<p>然后浏览器先手动打开 <code>http://localhost:9001/demo.html</code> 确认能打开，
+再把这个地址当作长网址填进管理台。</p>
+
+<h2>注意</h2>
+<ul>
+  <li>这个地址只在本机有效，是课程隔离演示用的，不是可对外发布的真实目标。</li>
+  <li>Shlink 容器里访问宿主机的 <code>localhost</code> 是它自己，
+      要用 <code>host.docker.internal</code>——但本实验把自动抓标题关了，
+      所以 Shlink 根本不需要访问这个页面，浏览器能打开就够了。</li>
+</ul>
+
+<p style="color:#64748b;font-size:13px;margin-top:40px">
+  实验03 · 容器化短网址服务系统 · 长网址演示目标
+</p>
+
+</body>
+</html>
